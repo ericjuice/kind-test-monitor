@@ -1,0 +1,5 @@
+**/tmp
+**/build
+**/data
+**/__pycache__
+FlameGraph

@@ -1,0 +1,20 @@
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: mongodb-external
+  namespace: juice
+subsets:
+  - addresses:
+      # 外部服务 IP 地址
+      - ip: 172.18.0.7
+    ports:
+      - port: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-external
+  namespace: juice
+spec:
+  ports:
+    - port: 27017
