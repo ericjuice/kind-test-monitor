@@ -4,9 +4,8 @@ metadata:
   name: mongodb-external
   namespace: juice
 subsets:
-  - addresses:
-      # 外部服务 IP 地址
-      - ip: 172.18.0.7
+  - addresses: 
+      - ip: 172.19.0.6 # OuterIP
     ports:
       - port: 27017
 ---
