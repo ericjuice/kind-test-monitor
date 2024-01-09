@@ -4,8 +4,8 @@ import threading
 from apps.logger import logger
 
 
-# Kubernetes command operator
 class KubeOperator:
+    # Kubernetes command operator
     def __init__(self):
         config.load_kube_config()
         self.__api_handler = client.CoreV1Api()
@@ -13,6 +13,9 @@ class KubeOperator:
         self.__node_names = []
         self.__master_node_name = ''
         self.__logger = logger()
+
+    def return_node_names(self) -> list:
+        return self.__node_names
 
     def get_pods_ip_and_nodes_name(self, namespace, label_selector):
         self.__pod_ips = []
@@ -47,8 +50,8 @@ class KubeOperator:
         else:
             self.__logger.info('Master node name: ' + self.__master_node_name)
 
-    # exec flame genarating and return to ajax to get svgs
     def exec_flame_genarate(self, type, port, time, freq) -> bool:
+        # exec flame genarating , the pods will save it to mongodb
         # get master node name, and get into it, and exec command to get flame
         # eg: docker exec <master_node_name> curl localhost:30002/flameg?time=3\&freq=99\&type=on
         if type != 'on' and type != 'off':
