@@ -10,7 +10,8 @@ NC='\033[0m' # 恢复默认颜色
 echo -e "${GREEN}正在下载并安装必备 apt 工具${NC}"
 apt update
 apt upgrade -y
-apt install -y wget curl vim
+apt install -y wget curl vim python3-pip python3
+echo -e "${GREEN}apt 工具安装完成！${NC}"
 
 # 检查 Docker 是否已经安装
 if ! command -v docker &> /dev/null; then

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Processing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Data Processing</h1>
+    <form id="dataForm">
+        <label for="mInput">Enter an integer (m):</label>
+        <input type="number" id="mInput" name="mInput" required>
+        <button type="submit">Process Data</button>
+    </form>
+    <div id="result"></div>
+
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        
+        socket.on('connection_response', function(data) {
+            console.log(data.data);
+        });
+
+        socket.on('data_processed', function(data) {
+            var n = data.n;
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            for (var i = 0; i < n; i++) {
+                var block = document.createElement('div');
+                block.className = 'red-block';
+                resultDiv.appendChild(block);
+            }
+        });
+
+        $('#dataForm').submit(function(e) {
+            e.preventDefault();
+            var m = parseInt($('#mInput').val());
+            socket.emit('process_data', {'m': m});
+        });
+    </script>
+
+    <style>
+        .red-block {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            margin: 5px;
+        }
+    </style>
+</body>
+</html>
