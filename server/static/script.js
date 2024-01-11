@@ -4,13 +4,18 @@ note = document.getElementById('notifyer');
 statu_light = document.getElementById('status_light');
 
 // a small colorful light hahahah
-function setLightColorClass(color_class){
+function setLightColorClass(color_class) {
     statu_light.classList.forEach(className => {
         if (className.startsWith('bg-')) {
-          statu_light.classList.remove(className);
+            statu_light.classList.remove(className);
         }
-      });
-      statu_light.classList.add(color_class);
+    });
+    statu_light.classList.add(color_class);
+}
+
+function setNoteOK() {
+    setLightColorClass('bg-green-300')
+    note.innerHTML = '成功'
 }
 
 socket.on('connect_error', function (error) {
@@ -22,7 +27,7 @@ socket.on('connect_error', function (error) {
 
 socket.on('err_msg', function (data) {
     note.innerHTML = data.data;
-    console.log('错误:',data.data)
+    console.log('错误:', data.data)
     setLightColorClass('bg-red-300')
 })
 
@@ -65,18 +70,42 @@ socket.on('connection_response', function (data) {
 // when flame graph is ready
 socket.on('flame_ok', function (data) {
     flame_res_div = document.getElementById('exec_gen_flame_res');
-    flame_res_div.innerHTML = data.data;
+    if (data.ctr == 0) {
+        flame_res_div.innerHTML = data.data;
+    }
+    if (data.ctr == 1) {
+        var results = JSON.parse(data.data);
+        console.log("执行完成");
+        flame_res_div.innerHTML = '';
+        // gen new div to save results
+        for (var i = 0; i < results.length; i++) {
+            var result_div = document.createElement('div');
+            result_div.classList.add('m-2')
+
+            var title_2 = document.createElement('h2');
+            title_2.innerHTML = results[i]
+            result_div.appendChild(title_2);
+
+            var svg_img = document.createElement('img');
+            svg_img.src = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/static/' + results[i] + '.svg';
+            result_div.appendChild(svg_img);
+
+            flame_res_div.appendChild(result_div);
+        }
+    }
+
+    setNoteOK();
     console.log("receive flame ok");
-    // TODO : draw
 });
 
 // when test cmd is ok
 socket.on('test_ok', function (data) {
     // id="exec_test_res"
     test_res_div = document.getElementById('exec_test_res');
+    test_res_div.classList.add('h-80')
     test_res_div.innerHTML = data.data;
+    setNoteOK();
     console.log("receive test ok");
-    // TODO : text
 })
 
 
@@ -116,11 +145,14 @@ function submitExecForm(event) {
         data: { command: command },
         success: function (response) {
             $("#exec_cmd_result").html(response.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>'));
-            // console.log(response);
+            setNoteOK();
+            console.log('exec cmd success');
         },
         error: function (error) {
             $("#exec_cmd_result").html(error);
-            // console.log(error);
+            note.innerHTML = '执行失败';
+            setLightColorClass('bg-red-300')
+            console.log('exec cmd error');
         }
     });
 }

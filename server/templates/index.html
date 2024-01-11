@@ -16,13 +16,14 @@
         </h2>
         <p>
             状态:
-            <span style="width: 10px; height: 10px;" class="bg-red-500 rounded-full inline-block" id="status_light"></span>
+            <span style="width: 10px; height: 10px;" class="bg-red-500 rounded-full inline-block"
+                id="status_light"></span>
             <span id="notifyer">未连接</span>
         </p>
     </div>
 
     <!-- test and flame -->
-    <div class="flex bg-gray-100 p-4 h-3/6 m-5 border rounded-lg">
+    <div class="flex flex-row bg-gray-100 p-4 h-3/6 m-5 border rounded-lg">
         <!-- Left -->
         <div class="w-1/2 p-4 ">
             <form class="mb-4" method="post">
@@ -34,26 +35,26 @@
                 </label>
                 <div class="flex">
                     <input type="text" id="exec_test_time"
-                        class="w-full my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        class="w-1/6 my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="时间(秒)" required>
                     <input type="text" id="exec_test_thread"
-                        class="w-full my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="线程数(HZ)" required>
+                        class="w-1/6 my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="线程数" required>
                     <input type="text" id="exec_test_qps"
-                        class="w-full my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        class="w-1/6 my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="QPS" required>
                     <input type="text" id="exec_test_addr"
-                        class="w-full my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        class="w-2/6 my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="地址, 如 http://127.0.0.1:8080" required>
-                    <button class="my-1 mx-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    <button class="w-1/6 my-1 mx-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         type="submit" onclick="submitTestForm(event)">提交</button>
                 </div>
             </form>
             <div class="border rounded">
                 <h3>测试结果</h3>
-                <div id="exec_test_res">
+                <textarea class="w-full h-32 overflow-hidden resize-none" id="exec_test_res">
                     等待中
-                </div>
+                </textarea>
             </div>
         </div>
         <!-- Right -->
@@ -68,17 +69,20 @@
                     </label>
                     <div class="flex">
                         <input type="text" id="exec_gen_flame_time"
-                            class="w-full my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            class="w-1/4 my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                             placeholder="时间(秒)" required>
                         <input type="text" id="exec_gen_flame_hz"
-                            class="w-full my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            class="w-1/4 my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                             placeholder="采样频率(HZ)" required>
-                        <label for="exec_gen_flame_selector">类型:</label>
-                        <select id="exec_gen_flame_selector" name="selector" required>
-                            <option value="on">on</option>
-                            <option value="off">off</option>
-                        </select>
-                        <button class="my-1 mx-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        <div class="w-2/6 flex flex-row justify-center items-center h-10 my-1 mx-1 px-4 py-2">
+                            <label class="w-1/5" for="exec_gen_flame_selector">类型:</label>
+                            <select class="w-4/5 border border-gray-300 h-10" id="exec_gen_flame_selector"
+                                name="selector" required>
+                                <option value="on">on</option>
+                                <option value="off">off</option>
+                            </select>
+                        </div>
+                        <button class="w-1/6 my-1 mx-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                             type="submit" onclick="submitFlameForm(event)">提交</button>
                     </div>
                 </form>
@@ -87,7 +91,7 @@
             <div>
                 <!-- graphs -->
                 火焰图结果
-                <div id="exec_gen_flame_res">
+                <div id="exec_gen_flame_res" class="flex">
                     等待中
                 </div>
             </div>
@@ -104,11 +108,12 @@
                     <i class="fa-solid fa-terminal"></i>
                     终端命令:
                 </label>
-                <div class="flex">
-                    <input type="text" id="exec_command_input"
-                        class="w-full my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Enter a command" required>
-                    <button class="my-1 mx-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                <div class="flex flex-row justify-center items-center">
+                    <input id="exec_command_input"
+                        class="w-5/6 my-1 mx-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter a command" required></input>
+                    <button
+                        class="w-1/6 my-1 mx-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         type="submit" onclick="submitExecForm(event)">提交</button>
                 </div>
             </form>
